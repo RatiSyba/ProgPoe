@@ -1,0 +1,108 @@
+using System;
+
+namespace RecipeApplication
+{
+    class Ingredient
+    {
+        public required string Name { get; set; }
+        public double Quantity { get; set; }
+        public required string Unit { get; set; }
+    }
+
+    class Recipe
+    {
+        public required string Name { get; set; }
+        public required Ingredient[] Ingredients { get; set; }
+        public required string[] Steps { get; set; }
+
+        public void DisplayRecipe()
+        {
+            // Display the name of the recipe
+            Console.WriteLine($"Recipe: {Name}");
+            // Display the list of ingredients with their quantities and units
+            Console.WriteLine("\nIngredients:");
+            foreach (var ingredient in Ingredients)
+            {
+                Console.WriteLine($"{ingredient.Quantity} {ingredient.Unit} of {ingredient.Name}");
+            }
+            Console.WriteLine("\nSteps:");
+            for (int i = 0; i < Steps.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. {Steps[i]}");
+            }
+        }
+
+        public void ScaleRecipe(double factor)
+        {
+            // go through each ingredient in the recipe
+            foreach (var ingredient in Ingredients)
+            {
+                // Scale the quantity of the ingredient by the entered factor
+                ingredient.Quantity *= factor;
+            }
+        }
+
+        public void ResetQuantities()
+        {
+            // Reset quantities to original values
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Recipe recipe = new Recipe();
+
+            Console.WriteLine("Welcome to the Recipe Maker!");
+
+            // Gather recipe details from the user
+            Console.Write("Enter the recipe name: ");
+            recipe.Name = Console.ReadLine();
+
+            Console.Write("Enter the number of ingredients: ");
+            int numIngredients = int.Parse(Console.ReadLine());
+            recipe.Ingredients = new Ingredient[numIngredients];
+            for (int i = 0; i < numIngredients; i++)
+            {
+                Console.Write($"Enter the name of ingredient {i + 1}: ");
+                string name = Console.ReadLine();
+                Console.Write($"Enter the quantity of {name}: ");
+                double quantity = double.Parse(s: Console.ReadLine());
+                Console.Write($"Enter the unit of measurement for {name}: ");
+                string unit = Console.ReadLine();
+                recipe.Ingredients[i] = new Ingredient { Name = name, Quantity = quantity, Unit = unit };
+            }
+
+            Console.Write("Enter the number of cooking steps: ");
+            int numSteps = int.Parse(Console.ReadLine());
+            recipe.Steps = new string[numSteps];
+            for (int i = 0; i < numSteps; i++)
+            {
+                Console.Write($"Enter step {i + 1}: ");
+                recipe.Steps[i] = Console.ReadLine();
+            }
+
+            // Display the full recipe
+            recipe.DisplayRecipe();
+
+            // Scale the recipe by a factor
+            Console.Write("\nEnter the scaling factor (0.5, 2, or 3): ");
+            double factor = double.Parse(Console.ReadLine());
+            recipe.ScaleRecipe(factor);
+            Console.WriteLine("\nScaled Recipe:");
+            recipe.DisplayRecipe();
+
+            // Reset quantities to original values
+            recipe.ResetQuantities();
+
+            // Clear all data to enter a new recipe
+            recipe = new Recipe();
+
+            Console.WriteLine("\nAll data cleared. You can enter a new recipe.");
+
+            Console.ReadLine(); // Keep console window open
+        }
+    }
+}
+
